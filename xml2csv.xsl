@@ -24,17 +24,18 @@ xmlns:xs="http://www.w3.org/2001/XMLSchema"
 	<xsl:template match="TicProduct">
 		<xsl:variable name="current" select="."/>
 
-		<!-- will only align with columns if there is a single value per column! -->
+		<!-- iterate columns -->
 		<xsl:for-each select="$columns">
+			<!-- select elements by matching name - will only align with columns if there is a single value per column! -->
 			<xsl:apply-templates select="$current/*[local-name() = current()]"/>
 
+			<!-- output separator between values, line-break after the last value -->
 			<xsl:choose>
 				<xsl:when test="not(position() = last())">
-					<xsl:text>,</xsl:text>
+					<xsl:value-of select="$separator"/>
 				</xsl:when>
 				<xsl:otherwise>
-						<xsl:text>
-</xsl:text>
+					<xsl:text>&#10;</xsl:text>
 				</xsl:otherwise>
 			</xsl:choose>
 		</xsl:for-each>
@@ -42,11 +43,10 @@ xmlns:xs="http://www.w3.org/2001/XMLSchema"
 
 	<xsl:template match="TicProduct/*">
 		<xsl:choose>
-			<xsl:when test=". castable as xs:string">
-				<!-- escape with double quotes -->
-				<xsl:text>"</xsl:text><xsl:value-of select="replace(., '&quot;', '&quot;&quot;')"/><xsl:text>"</xsl:text>
-			</xsl:when>
-			<xsl:otherwise><xsl:value-of select="."/></xsl:otherwise>
+			<!-- output numeric values as-is -->
+			<xsl:when test=". castable as xs:double"><xsl:value-of select="."/></xsl:when>
+			<!-- escape non-empty string values with double quotes -->
+			<xsl:when test="string(.)"><xsl:text>"</xsl:text><xsl:value-of select="replace(., '&quot;', '&quot;&quot;')"/><xsl:text>"</xsl:text></xsl:when>
 		</xsl:choose>
 	</xsl:template>
 
