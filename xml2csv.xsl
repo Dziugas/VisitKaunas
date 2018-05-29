@@ -50,6 +50,7 @@ xmlns:xs="http://www.w3.org/2001/XMLSchema"
 		</xsl:choose>
 	</xsl:template>
 
+	<!-- supress text between elements -->
 	<xsl:template match="text()"/>
 
 </xsl:stylesheet>
