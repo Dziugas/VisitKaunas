@@ -1,0 +1,1 @@
+java -jar saxonb9-1-0-8j/saxon9.jar kaunas.xml xml2csv.xsl > kaunas.csv
