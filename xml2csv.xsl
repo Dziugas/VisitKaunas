@@ -13,7 +13,10 @@ xmlns:xs="http://www.w3.org/2001/XMLSchema"
 	</xsl:param>
 
 	<xsl:template match="/">
+		<!-- output header row -->
 		<xsl:value-of select="string-join($columns, $separator)"/>
+
+		<!-- process document by applying templates recursively, starting from the root element -->
 		<xsl:apply-templates/>
 	</xsl:template>
 
