@@ -3,7 +3,7 @@
 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 xmlns:xs="http://www.w3.org/2001/XMLSchema"
 >
-	<xsl:output method="text" encoding="UTF-8"/>
+	<xsl:output method="text" media-type="text/csv" encoding="UTF-8"/>
 
 	<xsl:param name="separator" select="','" as="xs:string"/>
 	<xsl:param name="columns" as="xs:string*">
