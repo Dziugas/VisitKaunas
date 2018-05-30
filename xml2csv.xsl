@@ -8,7 +8,7 @@ xmlns:xs="http://www.w3.org/2001/XMLSchema"
 	<xsl:param name="separator" select="','" as="xs:string"/>
 	<xsl:param name="columns" as="xs:string*">
 		<!-- both element and attribute names become columns -->
-		<xsl:perform-sort select="distinct-values((/*/*/*/local-name(), /*/*/@*/local-name()))">
+		<xsl:perform-sort select="distinct-values(('Type', /*/*/*/local-name(), /*/*/@*/local-name()))">
 			<xsl:sort select="."/>
 		</xsl:perform-sort>
 	</xsl:param>
@@ -31,9 +31,16 @@ xmlns:xs="http://www.w3.org/2001/XMLSchema"
 
 		<!-- iterate columns -->
 		<xsl:for-each select="$columns">
-			<!-- select elements/attributes by matching name - will only align with columns if there is a single value per column! -->
-			<xsl:apply-templates select="$current/*[local-name() = current()] | $current/@*[local-name() = current()]"/>
-
+			<xsl:choose>
+				<xsl:when test="current() = 'Type'">
+					<!-- output row element name as type -->
+					<xsl:value-of select="$current/local-name()"/>
+				</xsl:when>
+				<xsl:otherwise>
+					<!-- select elements/attributes by matching name - will only align with columns if there is a single value per column! -->
+					<xsl:apply-templates select="$current/*[local-name() = current()] | $current/@*[local-name() = current()]"/>
+				</xsl:otherwise>
+			</xsl:choose>
 			<!-- output separator between values, line-break after the last value -->
 			<xsl:choose>
 				<xsl:when test="not(position() = last())">
