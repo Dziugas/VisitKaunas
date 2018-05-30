@@ -7,7 +7,7 @@ xmlns:xs="http://www.w3.org/2001/XMLSchema"
 
 	<xsl:param name="separator" select="','" as="xs:string"/>
 	<xsl:param name="columns" as="xs:string*">
-		<!-- both element and attribute names become columns -->
+		<!-- both element and attribute names become columns. Column names are distinct - no duplicates allowed. -->
 		<xsl:perform-sort select="distinct-values(('Type', /*/*/*/local-name(), /*/*/@*/local-name()))">
 			<xsl:sort select="."/>
 		</xsl:perform-sort>
