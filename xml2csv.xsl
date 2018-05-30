@@ -16,7 +16,7 @@ xmlns:xs="http://www.w3.org/2001/XMLSchema"
 	<xsl:template match="/">
 		<!-- output header row and line-break -->
 		<xsl:value-of select="string-join($columns, $separator)"/>
-		<xsl:text>&#10;&#13;</xsl:text>
+		<xsl:text>&#10;</xsl:text>
 
 		<!-- process document by applying templates recursively, starting from the root element -->
 		<xsl:apply-templates/>
@@ -40,7 +40,7 @@ xmlns:xs="http://www.w3.org/2001/XMLSchema"
 					<xsl:value-of select="$separator"/>
 				</xsl:when>
 				<xsl:otherwise>
-					<xsl:text>&#10;&#13;</xsl:text>
+					<xsl:text>&#10;</xsl:text>
 				</xsl:otherwise>
 			</xsl:choose>
 		</xsl:for-each>
