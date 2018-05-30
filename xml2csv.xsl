@@ -7,30 +7,32 @@ xmlns:xs="http://www.w3.org/2001/XMLSchema"
 
 	<xsl:param name="separator" select="','" as="xs:string"/>
 	<xsl:param name="columns" as="xs:string*">
-		<xsl:perform-sort select="distinct-values(/ArrayList/TicProduct/*/local-name())">
+		<!-- both element and attribute names become columns -->
+		<xsl:perform-sort select="distinct-values((/*/*/*/local-name(), /*/*/@*/local-name()))">
 			<xsl:sort select="."/>
 		</xsl:perform-sort>
 	</xsl:param>
 
 	<xsl:template match="/">
-		<!-- output header row -->
+		<!-- output header row and line-break -->
 		<xsl:value-of select="string-join($columns, $separator)"/>
+		<xsl:text>&#10;</xsl:text>
 
 		<!-- process document by applying templates recursively, starting from the root element -->
 		<xsl:apply-templates/>
 	</xsl:template>
 
-	<xsl:template match="ArrayList">
+	<xsl:template match="/*">
 		<xsl:apply-templates/>
 	</xsl:template>
 
-	<xsl:template match="TicProduct">
+	<xsl:template match="/*/*">
 		<xsl:variable name="current" select="."/>
 
 		<!-- iterate columns -->
 		<xsl:for-each select="$columns">
-			<!-- select elements by matching name - will only align with columns if there is a single value per column! -->
-			<xsl:apply-templates select="$current/*[local-name() = current()]"/>
+			<!-- select elements/attributes by matching name - will only align with columns if there is a single value per column! -->
+			<xsl:apply-templates select="$current/*[local-name() = current()] | $current/@*[local-name() = current()]"/>
 
 			<!-- output separator between values, line-break after the last value -->
 			<xsl:choose>
@@ -44,7 +46,7 @@ xmlns:xs="http://www.w3.org/2001/XMLSchema"
 		</xsl:for-each>
 	</xsl:template>
 
-	<xsl:template match="TicProduct/*">
+	<xsl:template match="/*/*/* | /*/*/@*">
 		<xsl:choose>
 			<!-- output numeric values as-is -->
 			<xsl:when test=". castable as xs:double"><xsl:value-of select="."/></xsl:when>
